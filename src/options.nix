@@ -74,7 +74,6 @@
     autochdir = true;
 
     undofile = true;
-    undodir = "${builtins.getEnv "HOME"}/.local/share/Trash/undodir";
     shada = "!,'50,<50,s10,h,r/tmp";
 
     foldenable = false;
@@ -93,6 +92,10 @@
     grepformat = "%f:%l:%c:%m,%f:%l:%m";
     formatprg = "prettier --stdin-filepath=%";
   };
+
+  extraConfigLua = ''
+    vim.opt.undodir = os.getenv("HOME") .. "/.local/share/Trash/undodir"
+  '';
 
   diagnostic.settings.float.border = "rounded";
 }
