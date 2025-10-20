@@ -6,7 +6,6 @@
 
   viAlias = true;
   vimAlias = true;
-  vimdiffAlias = true;
 
   globals = {
     gzip_plugin = 1;
@@ -75,7 +74,7 @@
     autochdir = true;
 
     undofile = true;
-    undodir = "~/.local/share/Trash/undodir/";
+    undodir = "${builtins.getEnv "HOME"}/.local/share/Trash/undodir";
     shada = "!,'50,<50,s10,h,r/tmp";
 
     foldenable = false;

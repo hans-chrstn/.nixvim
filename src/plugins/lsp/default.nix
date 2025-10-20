@@ -10,8 +10,6 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    borders.enable = true;
-    borders.style = "rounded";
     plugins = {
       lsp-format.enable = false; # Will be using none-ls
       lsp = {

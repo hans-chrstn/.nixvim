@@ -7,56 +7,63 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = {
-    self,
-    nixpkgs,
-    nixvim
-  } @ inputs: let
-    lib = nixpkgs.lib;
-    systems = [
-      "aarch64-linux"
-      "i686-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    forAllSystems = f: lib.genAttrs systems f;
-    nixvimFor = system:
-      nixvim.legacyPackages.${system}.makeNixvimWithModule {
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixvim,
+    }:
+    let
+      lib = nixpkgs.lib;
+      systems = [
+        "aarch64-linux"
+        "i686-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      forAllSystems = f: lib.genAttrs systems f;
+      nixvimFor =
+        system:
+        nixvim.legacyPackages.${system}.makeNixvimWithModule {
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+          module = import ./src;
         };
-        module = import ./src;
-      };
-  in
-  {
-    packages = forAllSystems (system: {
-      default = nixvimFor system;
-    });
+    in
+    {
+      packages = forAllSystems (system: {
+        default = nixvimFor system;
+      });
 
-    apps = forAllSystems (system: {
-      default = {
-        type = "app";
-        program = "${(nixvimFor system)}/bin/nvim";
-      };
+      apps = forAllSystems (system: {
+        default = {
+          type = "app";
+          program = "${(nixvimFor system)}/bin/nvim";
+        };
 
-      new-plugin = {
-        type = "app";
-        program = "${self}/scripts/new-plugin.sh";
-      };
-    });
+        new-plugin = {
+          type = "app";
+          program = "${self}/scripts/new-plugin.sh";
+        };
+      });
 
-    devShells = forAllSystems (system: let
-      pkgs = import nixpkgs { inherit system; };
-    in {
-      default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          self.packages.${system}.default
-          alejandra
-          git
-        ];
-      };
-    });
-  };
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              self.packages.${system}.default
+              alejandra
+              git
+            ];
+          };
+        }
+      );
+    };
 }
