@@ -9,13 +9,15 @@ in
 
   config = lib.mkIf cfg.enable {
     plugins = {
-      lsp-format.enable = true;
+      lsp-format.enable = false; # Will be using none-ls
       lsp = {
         enable = true;
+        capabilities = "offsetEncoding = 'utf-16'";
         inlayHints = true;
         servers = {
           cssls = { enable = true; };
           html = { enable = true; };
+          nixd.enable = true;
           yamlls = {
             enable = true;
             settings = {
@@ -40,6 +42,13 @@ in
             enable = true;
             installRustc = true;
             installCargo = true;
+            settings = {
+              checkOnSave = true;
+              check = {
+                command = "clippy";
+              };
+              procMacro.enable = true;
+            };
           };
 
           harper_ls = {
@@ -94,12 +103,54 @@ in
               action = "type_definition";
               desc = "Type Definition";
             };
+            K = {
+              action = "hover";
+              desc = "Hover";
+            };
+            "<leader>cw" = {
+              action = "workspace_symbol";
+              desc = "Workspace Symbol";
+            };
             "<leader>cr" = {
               action = "rename";
               desc = "Rename";
             };
+            "<leader>ca" = {
+              action = "code_action";
+              desc = "Code Action";
+            };
+            "<C-k>" = {
+              action = "signature_help";
+              desc = "Signature Help";
+            };
+          };
+          diagnostic = {
+            "<leader>cd" = {
+              action = "open_float";
+              desc = "Line Diagnostics";
+            };
+            "[d" = {
+              action = "goto_next";
+              desc = "Next Diagnostic";
+            };
+            "]d" = {
+              action = "goto_prev";
+              desc = "Previous Diagnostic";
+            };
           };
         };
+        onAttach = ''
+          vim.api.nvim_create_autocmd("LspAttach", {
+            group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+            callback = function(args)
+              local client = vim.lsp.get_client_by_id(args.data.client_id)
+              if client.server_capabilities.inlayHintProvider then
+                vim.lsp.inlay_hint.enable(false)
+              end
+              vim.bo[args.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+            end,
+          })
+        '';
       };
     };
 
@@ -118,9 +169,15 @@ in
         }
       )
 
-      vim.diagnostic.config{
-        float={border=_border}
-      };
+      vim.diagnostic.config({
+        float = { border = _border },
+        virtual_text = {
+          prefix = "",
+        },
+        signs = true,
+        underline = true,
+        update_in_insert = true,
+      })
 
       require('lspconfig.ui.windows').default_options = {
         border = _border
@@ -134,7 +191,7 @@ in
           config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
           lspconfig[server].setup(config)
         end
-      end;
+      end
     '';
   };
 }

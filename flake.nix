@@ -47,9 +47,15 @@
       };
     });
 
-    devShells = forAllSystems (system: {
-      default = nixpkgs.legacyPackages.${system}.mkShell {
-        buildInputs = [ self.packages.${system}.default ];
+    devShells = forAllSystems (system: let
+      pkgs = import nixpkgs { inherit system; };
+    in {
+      default = pkgs.mkShell {
+        buildInputs = with pkgs; [
+          self.packages.${system}.default
+          alejandra
+          git
+        ];
       };
     });
   };
