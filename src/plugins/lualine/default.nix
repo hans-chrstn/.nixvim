@@ -13,13 +13,10 @@ in {
     plugins.lualine = {
       enable = true;
       settings = {
-        options = {
-          theme = "dracula";
-        };
         sections = {
-          lualine_a = [ "mode" ];
-          lualine_b = [ "branch" "diff" "diagnostics" ];
-          lualine_c = [ ];
+          lualine_a = ["mode"];
+          lualine_b = ["branch" "diff" "diagnostics"];
+          lualine_c = [];
         };
       };
     };
