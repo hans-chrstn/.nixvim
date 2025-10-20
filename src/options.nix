@@ -1,9 +1,12 @@
-{ pkgs, ...}:
-{
+{pkgs, ...}: {
   extraPackages = with pkgs; [
     wl-clipboard
     xclip
   ];
+
+  viAlias = true;
+  vimAlias = true;
+  vimdiffAlias = true;
 
   globals = {
     gzip_plugin = 1;

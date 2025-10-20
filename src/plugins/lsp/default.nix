@@ -1,13 +1,17 @@
-{ config, lib, ... }:
-let
-  cfg = config.lsp;
-in 
 {
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.lsp;
+in {
   options.lsp = {
     enable = lib.mkEnableOption "Enable neovim LSP";
   };
 
   config = lib.mkIf cfg.enable {
+    borders.enable = true;
+    borders.style = "rounded";
     plugins = {
       lsp-format.enable = false; # Will be using none-ls
       lsp = {
@@ -15,9 +19,12 @@ in
         capabilities = "offsetEncoding = 'utf-16'";
         inlayHints = true;
         servers = {
-          cssls = { enable = true; };
-          html = { enable = true; };
-          nixd.enable = true;
+          cssls = {enable = true;};
+          html = {enable = true;};
+          nixd = {
+            enable = true;
+            cmd = ["alejandra"];
+          };
           yamlls = {
             enable = true;
             settings = {
