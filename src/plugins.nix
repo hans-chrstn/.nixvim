@@ -7,7 +7,46 @@
 in {
   imports = lib.attrValues plugins;
   colorschemes = {
-    catppuccin.enable = true;
+    catppuccin = {
+      enable = true;
+      settings = {
+        background = {
+          light = "macchiato";
+          dark = "mocha";
+        };
+        flavour = "mocha";
+        disable_bold = false;
+        disable_italic = false;
+        disable_underline = false;
+        transparent_background = true;
+        term_colors = true;
+        integrations = {
+          cmp = true;
+          noice = true;
+          notify = true;
+          gitsigns = true;
+          # which_key = true;
+          # illuminate.enabled = true;
+          treesitter = true;
+          treesitter_context = true;
+          telescope.enabled = true;
+          indent_blankline.enabled = true;
+          mini.enabled = false;
+          native_lsp = {
+            enabled = true;
+            inlay_hints = {
+              background = true;
+            };
+            underlines = {
+              errors = ["underline"];
+              hints = ["underline"];
+              information = ["underline"];
+              warnings = ["underline"];
+            };
+          };
+        };
+      };
+    };
   };
   lsp.enable = true;
   barbar.enable = true;
@@ -30,4 +69,9 @@ in {
   toggleterm.enable = true;
   treesitter.enable = true;
   yazi.enable = true;
+  notify.enable = true;
+  noice.enable = true;
+  gitsigns.enable = true;
+  lazygit.enable = true;
+  which-key.enable = true;
 }
