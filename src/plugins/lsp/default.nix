@@ -2,9 +2,11 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.lsp;
-in {
+in
+{
   options.lsp = {
     enable = lib.mkEnableOption "Enable neovim LSP";
   };
@@ -17,12 +19,19 @@ in {
         capabilities = "offsetEncoding = 'utf-16'";
         inlayHints = true;
         servers = {
-          cssls = {enable = true;};
-          html = {enable = true;};
+          cssls = {
+            enable = true;
+          };
+          html = {
+            enable = true;
+          };
           nixd = {
             enable = true;
             settings = {
-              formatting.command = ["alejandra"];
+              formatting = {
+                enable = true;
+                command = [ "alejandra" ];
+              };
             };
           };
           yamlls = {

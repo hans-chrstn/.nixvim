@@ -1,9 +1,10 @@
-{ lib, config, ... }:
-
-let
-  cfg = config.none-ls;
-in
 {
+  lib,
+  config,
+  ...
+}: let
+  cfg = config.none-ls;
+in {
   options.none-ls = {
     enable = lib.mkEnableOption "Enable the none-ls plugin";
   };
@@ -42,30 +43,7 @@ in
             statix.enable = true;
           };
 
-          formatting = {
-            alejandra.enable = true;
-            nixfmt.enable = false;
-            prettier = {
-              enable = true;
-	      disableTsServerFormatter = true;
-              settings = ''
-                {
-                  extra_args = { "--no-semi", "--single-quote" },
-                }
-              '';
-            };
-
-            google_java_format.enable = true;
-            stylua.enable = true;
-            black = {
-              enable = true;
-              settings = ''
-                {
-                  extra_args = { "--fast" },
-                }
-              '';
-            };
-          };
+          formatting = {};
         };
       };
     };
