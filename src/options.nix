@@ -2,7 +2,6 @@
   extraPackages = with pkgs; [
     wl-clipboard
     xclip
-    alejandra
   ];
 
   viAlias = true;
