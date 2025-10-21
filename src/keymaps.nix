@@ -1,13 +1,12 @@
 { ... }:
 {
-  globals.mapleader = " ";
-
-  keymaps = [
+  vim.keymaps =
+  [
     {
       mode = "n";
       key = "<leader>d";
       action = "<cmd>lua vim.diagnostic.open_float(nil, { focus = false })<cr>";
-      options.desc = "Open diagnostics float";
+      desc = "Open diagnostics float";
     }
   ];
 }

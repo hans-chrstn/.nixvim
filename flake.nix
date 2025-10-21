@@ -2,15 +2,15 @@
   description = "My NixVim Config";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixvim = {
-      url = "github:nix-community/nixvim";
+    nvf = {
+      url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs = {
     self,
     nixpkgs,
-    nixvim,
+    nvf,
   }: let
     lib = nixpkgs.lib;
     systems = [
@@ -21,28 +21,27 @@
       "x86_64-darwin"
     ];
     forAllSystems = f: lib.genAttrs systems f;
-    nixvimFor = system:
-      nixvim.legacyPackages.${system}.makeNixvimWithModule {
+    nvfFor = system: (nvf.lib.neovimConfiguration {
         pkgs = import nixpkgs {
           inherit system;
           config.allowUnfree = true;
         };
-        module = import ./src;
-      };
+        modules = [./src];
+      }).neovim;
   in {
     packages = forAllSystems (system: {
-      default = nixvimFor system;
+      default = nvfFor system;
     });
 
     apps = forAllSystems (system: {
       default = {
         type = "app";
-        program = "${(nixvimFor system)}/bin/nvim";
+        program = "${(nvfFor system)}/bin/nvim";
       };
 
-      new-plugin = {
+      new-component = {
         type = "app";
-        program = "${self}/scripts/new-plugin.sh";
+        program = "${self}/scripts/new-component.sh";
       };
     });
 
