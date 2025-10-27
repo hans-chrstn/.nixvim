@@ -1,12 +1,11 @@
 {
   config,
   lib,
+  pkgs,
   ...
-}:
-let
+}: let
   cfg = config.lsp;
-in
-{
+in {
   options.lsp = {
     enable = lib.mkEnableOption "Enable neovim LSP";
   };
@@ -19,6 +18,10 @@ in
         capabilities = "offsetEncoding = 'utf-16'";
         inlayHints = true;
         servers = {
+          gdscript = {
+            enable = true;
+            package = pkgs.gdtoolkit_4;
+          };
           cssls = {
             enable = true;
           };
@@ -30,7 +33,7 @@ in
             settings = {
               formatting = {
                 enable = true;
-                command = [ "alejandra" ];
+                command = ["alejandra"];
               };
             };
           };
@@ -172,6 +175,12 @@ in
 
     extraConfigLua = ''
       local _border = "rounded"
+
+      vim.lsp.config.gdscript.setup {}
+      local pipepath = vim.fn.stdpath("cache") .. "/server.pipe"
+      if not vim.loop.fs_stat(pipepath) then
+        vim.fn.serverstart(pipepath)
+      end
 
       vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
         vim.lsp.handlers.hover, {
