@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, customPackages, ... }:
 
 let
   cfg = config.NEW_COMPONENT_NAME;

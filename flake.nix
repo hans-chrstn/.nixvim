@@ -3,7 +3,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nvf = {
-      url = "github:NotAShelf/nvf";
+      url = "github:NotAShelf/nvf/v0.8";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -21,11 +21,15 @@
       "x86_64-darwin"
     ];
     forAllSystems = f: lib.genAttrs systems f;
-    nvfFor = system: (nvf.lib.neovimConfiguration {
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        };
+    pkgsFor = system:
+      import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+        overlays = [(import ./overlays)];
+      };
+    nvfFor = system:
+      (nvf.lib.neovimConfiguration {
+        pkgs = pkgsFor system;
         modules = [./src];
       }).neovim;
   in {
@@ -47,7 +51,7 @@
 
     devShells = forAllSystems (
       system: let
-        pkgs = import nixpkgs {inherit system;};
+        pkgs = pkgsFor system;
       in {
         default = pkgs.mkShell {
           buildInputs = with pkgs; [

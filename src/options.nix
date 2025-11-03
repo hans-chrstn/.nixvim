@@ -1,6 +1,10 @@
 {pkgs, ...}:
 {
   vim = {
+    clipboard = {
+      enable = true;
+      registers = "unnamedplus";
+    };
     globals = {
       gzip_plugin = 1;
       netrw_plugin = 1;
@@ -23,7 +27,6 @@
       numberwidth = 2;
       cursorline = false;
       cursorcolumn = false;
-      clipboard = "unnamedplus";
       showmode = false;
       showmatch = true;
       matchtime = 2;
