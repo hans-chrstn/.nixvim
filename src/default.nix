@@ -33,7 +33,7 @@ in {
   conform.enable = true;
   copilot.enable = true;
   cord.enable = true;
-  dashboard.enable = true;
+  # dashboard.enable = true;
   fidget.enable = true;
   gitsigns.enable = true;
   lspsaga.enable = true;
@@ -52,4 +52,5 @@ in {
   cinnamon.enable = true;
   smear-cursor.enable = true;
   colorizer.enable = true;
+  snacks.enable = true;
 }

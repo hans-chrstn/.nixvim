@@ -47,8 +47,8 @@ in {
     };
 
     vim.lazy.plugins = {
-      "vimplugin-lazy-lsp" = {
-        package = pkgs.vimPlugins.lazy-lsp;
+      "lazy-lsp.nvim" = {
+        package = pkgs.vimPlugins.lazy-lsp-nvim;
         event = ["LspAttach"];
         setupModule = "lazy-lsp";
         setupOpts = {
