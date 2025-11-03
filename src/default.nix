@@ -10,6 +10,13 @@ in {
     xsel
     wl-clipboard
     ripgrep
+    fd
+    nodejs
+    black
+    prettier
+    stylua
+    rustfmt
+    google-java-format
   ];
   imports =
     [

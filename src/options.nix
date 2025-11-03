@@ -1,11 +1,15 @@
-{pkgs, ...}:
-{
+{pkgs, ...}: {
   vim = {
+    enableLuaLoader = true;
     clipboard = {
       enable = true;
       registers = "unnamedplus";
     };
     globals = {
+      loaded_perl_provider = 0;
+      loaded_ruby_provider = 0;
+      loaded_node_provider = 0;
+      loaded_python3_provider = 0;
       gzip_plugin = 1;
       netrw_plugin = 1;
       tar_plugin = 1;
@@ -21,6 +25,7 @@
     };
 
     options = {
+      wrap = false;
       termguicolors = true;
       number = true;
       relativenumber = true;
@@ -88,6 +93,17 @@
       grepprg = "rg --vimgrep --no-heading --smart-case";
       grepformat = "%f:%l:%c:%m,%f:%l:%m";
       formatprg = "prettier --stdin-filepath=%";
+
+      lazyredraw = false;
+      redrawtime = 1500;
+      synmaxcol = 240;
+      re = 0;
+
+      completeopt = "menu,menuone,noselect";
+
+      swapfile = false;
+      backup = false;
+      writebackup = false;
     };
   };
 }
