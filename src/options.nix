@@ -106,6 +106,35 @@
       writebackup = false;
     };
 
+    luaConfigRC.borders = ''
+      local border = "rounded"
+
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+        vim.lsp.handlers.hover, {
+          border = border
+        }
+      )
+
+      vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+        vim.lsp.handlers.signature_help, {
+          border = border
+        }
+      )
+
+      vim.diagnostic.config({
+        float = {
+          border = border
+        }
+      })
+
+      local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+      function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or border
+        return orig_util_open_floating_preview(contents, syntax, opts, ...)
+      end
+    '';
+
     luaConfigRC.godot = ''
       vim.filetype.add({
         extension = {
