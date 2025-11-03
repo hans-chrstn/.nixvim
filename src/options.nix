@@ -115,18 +115,40 @@
         },
       })
 
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "gdscript",
+      vim.api.nvim_create_autocmd("VimEnter", {
         callback = function()
-          local lspconfig = require('lspconfig')
+          local ok, lspconfig = pcall(require, 'lspconfig')
+          if not ok then
+            return
+          end
 
-          lspconfig.gdscript.setup({
-            name = 'Godot',
-            cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
-            root_dir = lspconfig.util.root_pattern('project.godot', '.git'),
-            filetypes = { 'gd', 'gdscript', 'gdscript3' },
-            on_attach = function(client, bufnr)
-              vim.notify('Godot LSP connected!', vim.log.levels.INFO)
+          local configs = require('lspconfig.configs')
+          if not configs.gdscript then
+            configs.gdscript = {
+              default_config = {
+                cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+                filetypes = { 'gd', 'gdscript', 'gdscript3' },
+                root_dir = lspconfig.util.root_pattern('project.godot', '.git'),
+                name = 'Godot',
+              },
+            }
+          end
+
+          vim.api.nvim_create_autocmd("FileType", {
+            pattern = "gdscript",
+            callback = function()
+              local capabilities = vim.lsp.protocol.make_client_capabilities()
+              local ok_blink, blink = pcall(require, 'blink.cmp')
+              if ok_blink then
+                capabilities = blink.get_lsp_capabilities(capabilities)
+              end
+
+              lspconfig.gdscript.setup({
+                capabilities = capabilities,
+                on_attach = function(client, bufnr)
+                  vim.notify('Godot LSP connected!', vim.log.levels.INFO)
+                end,
+              })
             end,
           })
         end,
