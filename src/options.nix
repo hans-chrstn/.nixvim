@@ -105,5 +105,32 @@
       backup = false;
       writebackup = false;
     };
+
+    luaConfigRC.godot = ''
+      vim.filetype.add({
+        extension = {
+          gd = 'gdscript',
+          tres = 'gdresource',
+          tscn = 'gdscene',
+        },
+      })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "gdscript",
+        callback = function()
+          local lspconfig = require('lspconfig')
+
+          lspconfig.gdscript.setup({
+            name = 'Godot',
+            cmd = vim.lsp.rpc.connect('127.0.0.1', 6005),
+            root_dir = lspconfig.util.root_pattern('project.godot', '.git'),
+            filetypes = { 'gd', 'gdscript', 'gdscript3' },
+            on_attach = function(client, bufnr)
+              vim.notify('Godot LSP connected!', vim.log.levels.INFO)
+            end,
+          })
+        end,
+      })
+    '';
   };
 }

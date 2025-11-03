@@ -17,6 +17,8 @@ in {
     stylua
     rustfmt
     google-java-format
+    nixd
+    rust-analyzer
   ];
   imports =
     [

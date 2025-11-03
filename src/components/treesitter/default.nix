@@ -102,6 +102,8 @@ in {
         vimdoc
         toml
         yaml
+        gdscript
+        godot_resource
       ];
     };
 
