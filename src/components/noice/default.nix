@@ -48,14 +48,6 @@ in {
             command_palette = true;
             long_message_to_split = true;
           };
-          routes = [
-            {
-              filter = {
-                event = "notify";
-              };
-              view = "notify";
-            }
-          ];
           format = {
             filter = {
               pattern = [

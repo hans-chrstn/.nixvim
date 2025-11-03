@@ -50,4 +50,6 @@ in {
   which-key.enable = true;
   yazi.enable = true;
   cinnamon.enable = true;
+  smear-cursor.enable = true;
+  colorizer.enable = true;
 }
